@@ -15,7 +15,7 @@ struct node *insert(struct node *l, int val) {
   return temp;
 }
 // Function to insert a new node at the end of a BigInteger's linked list
-void insert_tail(struct BigInteger *num, int element) {
+void tail(struct BigInteger *num, int element) {
   struct node *temp = (struct node *)malloc(sizeof(struct node));
   if (temp == NULL) {
     printf("memory allocation failed\n");
@@ -44,10 +44,10 @@ long int length(struct node *l) {
   return count;
 }
 // Function to display a linked list in reverse order
-void displayLL(struct node *link) {
+void revDisplay(struct node *link) {
   if (!link)
     return;
-  displayLL(link->next);
+  revDisplay(link->next);
   printf("%d", link->data);
 }
 // Function to display a BigInteger
@@ -58,7 +58,7 @@ void display(struct BigInteger b) {
   }
   if (b.sign == '-')
     printf("-");
-  displayLL(b.l);
+  revDisplay(b.l);
 }
 // Function to initialize a BigInteger from a string
 struct BigInteger initialize(char *s) {
@@ -90,8 +90,8 @@ struct node *reverse(struct node *l) {
   }
   return prev;
 }
-// Function to compare two BigIntegers
-int compare(struct BigInteger a, struct BigInteger b) {
+// Function to Compare two BigIntegers
+int Compare(struct BigInteger a, struct BigInteger b) {
   if (b.length > a.length) {
     return -1;
   } else if (b.length == a.length) {
@@ -146,7 +146,7 @@ struct BigInteger add(struct BigInteger a, struct BigInteger b) {
 
     sum = d1 + d2 + carry;
     carry = sum / 10;
-    insert_tail(&result, sum % 10);
+    tail(&result, sum % 10);
 
     if (l1 != NULL)
       l1 = l1->next;
@@ -181,7 +181,7 @@ struct BigInteger sub(struct BigInteger a, struct BigInteger b) {
     b.sign = '-';
     a.sign = '-';
     return result;
-  } else if (compare(a, b) == -1) {
+  } else if (Compare(a, b) == -1) {
     struct BigInteger temp = a;
     a = b;
     b = temp;
@@ -203,7 +203,7 @@ struct BigInteger sub(struct BigInteger a, struct BigInteger b) {
       borrow = 0;
     }
 
-    insert_tail(&result, diff);
+    tail(&result, diff);
 
     if (l1 != NULL)
       l1 = l1->next;
@@ -235,17 +235,17 @@ struct BigInteger mul(struct BigInteger a, struct BigInteger b) {
     carry = 0;
     mid = initialize("");
     for (int j = 0; j < i; j++) {
-      insert_tail(&mid, 0);
+      tail(&mid, 0);
     }
     while (n1 != NULL) {
       product = (n1->data) * (n2->data) + carry;
-      insert_tail(&mid, product % 10);
+      tail(&mid, product % 10);
       carry = product / 10;
       n1 = n1->next;
     }
 
     if (carry > 0) {
-      insert_tail(&mid, carry);
+      tail(&mid, carry);
     }
 
     res = add(mid, res);
@@ -282,7 +282,7 @@ struct BigInteger div1(struct BigInteger a, struct BigInteger b) {
   a.sign = '+';
   b.sign = '+';
   struct BigInteger temp = add(b, initialize("0"));
-  while (compare(a, temp) >= 0) {
+  while (Compare(a, temp) >= 0) {
     temp = add(temp, b);
     result = add(result, initialize("1"));
     flag = 1;
@@ -312,7 +312,7 @@ struct BigInteger mod(struct BigInteger a, struct BigInteger b) {
   a.sign = '+';
   b.sign = '+';
   struct BigInteger temp = add(b, initialize("0"));
-  while (compare(a, temp) >= 0) {
+  while (Compare(a, temp) >= 0) {
     temp = add(temp, b);
     result = add(result, initialize("1"));
   }
